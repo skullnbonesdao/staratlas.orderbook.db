@@ -9,7 +9,7 @@ import {
   Order,
 } from "@staratlas/factory";
 import * as os from "os";
-import { Collection, MongoClient } from "mongodb";
+import {Collection, InsertOneResult, MongoClient} from "mongodb";
 
 export class MyService implements GmEventHandler {
   private gmOrderbookService: GmOrderbookService;
@@ -91,7 +91,11 @@ export class MyService implements GmEventHandler {
     event: GmChangeEvent
   ): Promise<void> {
     console.log(chalk.green("Event: ADDED"));
-    const inert_result = await this.collectionADD.insertOne(event.order);
+    const inert_result: InsertOneResult = await this.collectionADD.insertOne({
+        lastModified: new Date(),
+        created: new Date(),
+        order: event.order
+    });
   }
 
   private async handleOrderModified(
@@ -99,7 +103,11 @@ export class MyService implements GmEventHandler {
     event: GmChangeEvent
   ): Promise<void> {
     console.log(chalk.yellow("Event: MODIFIED"));
-    const inert_result = await this.collectionMOD.insertOne(event.order);
+    const inert_result = await this.collectionMOD.insertOne({
+      created: new Date(),
+      lastModified: new Date(),
+      order: event.order
+    });
   }
 
   private async handleOrderRemoved(
@@ -107,6 +115,11 @@ export class MyService implements GmEventHandler {
     event: GmChangeEvent
   ): Promise<void> {
     console.log(chalk.red("Event: REMOVED"));
-    const inert_result = await this.collectionREM.insertOne(event.order);
+    const inert_result = await this.collectionREM.insertOne({
+      created: new Date(),
+      lastModified: new Date(),
+      order: event.order
+    });
   }
+
 }
