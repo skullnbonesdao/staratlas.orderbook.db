@@ -2,7 +2,7 @@
 version: '2'
 services:
   mongo:
-    image: mongo
+    image: mongo:4.4-bionic
     restart: always
     ports:
       - "3345:27017"
