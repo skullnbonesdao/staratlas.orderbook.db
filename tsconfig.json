@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "module": "Node16",
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "rootDir": "src",
+        "outDir": "build"
+    },
+}

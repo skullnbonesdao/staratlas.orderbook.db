@@ -1,0 +1,21 @@
+FROM node:15-alpine AS base
+
+# Stage_1 BUILD
+FROM base AS build
+WORKDIR /usr/src/app
+
+COPY package.json .
+RUN npm install
+COPY . .
+RUN npx tsc -p ./tsconfig.json
+
+
+# Stage_2 PROD
+FROM base AS prod
+WORKDIR /usr/src/app
+
+COPY package.json .
+RUN npm install --production
+COPY --from=build /usr/src/app/build dist
+
+CMD ["node", "/usr/src/app/dist/index.js"]

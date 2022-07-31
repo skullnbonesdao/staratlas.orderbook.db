@@ -1,0 +1,38 @@
+
+version: '2'
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+      - /etc/localtime:/etc/localtime:ro
+    volumes:
+      - mongo-storage:/var
+
+  staratlas:
+    build:
+      context: .
+      dockerfile: DOCKERFILE
+    restart: always
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    environment:
+      - MONGO_URL=${MONGO_URL}
+      - MONGO_PORT=${MONGO_PORT}
+      - MONGO_USERNAME=${MONGO_USERNAME}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_DB_NAME=${MONGO_DB_NAME}
+      - /etc/localtime:/etc/localtime:ro
+    
+
+ 
+
+volumes:
+  mongo-storage:
+ 
