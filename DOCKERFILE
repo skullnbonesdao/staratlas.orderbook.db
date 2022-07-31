@@ -1,4 +1,4 @@
-FROM node:15-alpine AS base
+FROM node:lts-alpine3.16 AS base
 
 # Stage_1 BUILD
 FROM base AS build
@@ -15,6 +15,7 @@ FROM base AS prod
 WORKDIR /usr/src/app
 
 COPY package.json .
+RUN npm update
 RUN npm install --production
 COPY --from=build /usr/src/app/build dist
 
