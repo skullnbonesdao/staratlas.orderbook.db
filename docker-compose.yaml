@@ -11,7 +11,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
       - /etc/localtime:/etc/localtime:ro
     volumes:
-      - mongo-storage:/var
+      - mongo-storage:/data/db
 
   staratlas:
     build:
