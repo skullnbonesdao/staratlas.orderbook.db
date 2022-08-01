@@ -18,6 +18,7 @@ export class MyService implements GmEventHandler {
   private collectionADD: Collection;
   private collectionMOD: Collection;
   private collectionREM: Collection;
+  private collectionALL: Collection;
   //private influxDatabase: InfluxDB;
 
   constructor() {
@@ -67,6 +68,7 @@ export class MyService implements GmEventHandler {
     this.collectionADD = db.collection("orders_add");
     this.collectionMOD = db.collection("orders_mod");
     this.collectionREM = db.collection("orders_rem");
+    this.collectionALL = db.collection("orders_all")
   }
 
   // onEvent will be fired any time a change occurs in the marketplace state
@@ -76,10 +78,10 @@ export class MyService implements GmEventHandler {
         await this.handleOrderAdded(event);
         break;
       case GmEventType.orderModified:
-        this.handleOrderModified(event);
+        await this.handleOrderModified(event);
         break;
       case GmEventType.orderRemoved:
-        this.handleOrderRemoved(event);
+        await this.handleOrderRemoved(event);
         break;
       default:
         break;
@@ -96,6 +98,14 @@ export class MyService implements GmEventHandler {
         created: new Date(),
         order: event.order
     });
+
+    const inert_result_all: InsertOneResult =  await this.collectionALL.insertOne({
+      event: "add",
+      lastModified: new Date(),
+      created: new Date(),
+      order: event.order
+    });
+
   }
 
   private async handleOrderModified(
@@ -108,6 +118,13 @@ export class MyService implements GmEventHandler {
       lastModified: new Date(),
       order: event.order
     });
+
+    const inert_result_all: InsertOneResult =  await this.collectionALL.insertOne({
+      event: "mod",
+      lastModified: new Date(),
+      created: new Date(),
+      order: event.order
+    });
   }
 
   private async handleOrderRemoved(
@@ -118,6 +135,13 @@ export class MyService implements GmEventHandler {
     const inert_result = await this.collectionREM.insertOne({
       created: new Date(),
       lastModified: new Date(),
+      order: event.order
+    });
+
+    const inert_result_all: InsertOneResult =  await this.collectionALL.insertOne({
+      event: "rem",
+      lastModified: new Date(),
+      created: new Date(),
       order: event.order
     });
   }
