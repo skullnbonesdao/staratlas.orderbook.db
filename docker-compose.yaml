@@ -1,4 +1,3 @@
-
 version: '2'
 services:
   mongo:
@@ -28,8 +27,10 @@ services:
       - MONGO_USERNAME=${MONGO_USERNAME}
       - MONGO_PASSWORD=${MONGO_PASSWORD}
       - MONGO_DB_NAME=${MONGO_DB_NAME}
+      - LOG_ORDERBOOK=${LOG_ORDERBOOK}
+      - LOG_ORDER=${LOG_ORDER}
       - /etc/localtime:/etc/localtime:ro
-    
+
 
 volumes:
   mongo-storage:
