@@ -21,7 +21,8 @@ export class ServiceOrder {
             const inert_result: InsertOneResult = await this.collection.insertOne({
                 lastModified: new Date(),
                 created: new Date(),
-                event: eventType === 0 ? 'add' : eventType === 1 ? 'rem' : eventType === 2 ? 'add' : eventType,
+                event: eventType === 0 ? 'add' : eventType === 1 ? 'rem' : eventType === 2 ? 'mod' : eventType,
+                eventType: eventType,
                 order: order,
                 slotContext: slotContext,
             });
